@@ -15,7 +15,11 @@ function searchHandler() {
   }
   cityInput.classList.remove("emptyCity");
   cityInput.placeholder = "Enter City Name";
-  result.textContent = city;
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=e82c39ac97dae6f6977d113b0513e7a4`,
+  )
+    .then((response) => response.json())
+    .then((data) => console.log(data));
 }
 
 //event handler
