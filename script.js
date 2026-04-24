@@ -4,26 +4,38 @@ let result = document.querySelector("#result");
 
 // functions
 
-function searchHandler() {
-  let city = cityInput.value.trim();
+async function searchHandler() {
+  const city = cityInput.value.trim();
   if (city === "") {
     cityInput.value = "";
-    cityInput.placeholder = " Please Enter a Valid City";
+    cityInput.placeholder = "Enter Valid City";
     cityInput.classList.add("emptyCity");
-    result.textContent = "";
     return;
   }
+  result.textContent = "";
   cityInput.classList.remove("emptyCity");
-  cityInput.placeholder = "Enter City Name";
-  fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=e82c39ac97dae6f6977d113b0513e7a4`,
-  )
-    .then((response) => response.json())
-    .then((data) => console.log(data));
+
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=e82c39ac97dae6f6977d113b0513e7a4`,
+    );
+
+    const data = await response.json();
+    //data validation
+    if (data.cod === 404) {
+      result.textContent = "City Not Found";
+    }
+    result.textContent = `
+    
+    City: ${data.name}
+    Weather:${data.weather[0].description}
+    Temperature: ${data.main.temp}
+    
+    `;
+  } catch (error) {
+    result.textContent = "Something went Wrong";
+  }
 }
-
-//event handler
-
 searchBtn.addEventListener("click", searchHandler);
 
 cityInput.addEventListener("keydown", (e) => {
