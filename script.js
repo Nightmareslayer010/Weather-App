@@ -14,7 +14,8 @@ async function searchHandler() {
   }
   result.textContent = "";
   cityInput.classList.remove("emptyCity");
-
+  antiSpam(true);
+  result.textContent = "Fetching fata Please Wait...";
   try {
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=e82c39ac97dae6f6977d113b0513e7a4`,
@@ -32,10 +33,22 @@ async function searchHandler() {
     Temperature: ${data.main.temp}
     
     `;
+    antiSpam(false);
   } catch (error) {
     result.textContent = "Something went Wrong";
+  } finally {
+    antiSpam(false);
   }
 }
+
+//anti spam
+
+function antiSpam(isDisabled) {
+  searchBtn.disabled = isDisabled;
+  cityInput.disabled = isDisabled;
+}
+
+// event listeners
 searchBtn.addEventListener("click", searchHandler);
 
 cityInput.addEventListener("keydown", (e) => {
