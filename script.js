@@ -1,4 +1,4 @@
-let cityInput = document.querySelector("#cityInput");
+let cityInput = document.querySelector("#city-input");
 let searchBtn = document.querySelector("#searchBtn");
 let result = document.querySelector("#result");
 //elements
@@ -6,17 +6,19 @@ let cityName = document.querySelector("#city");
 let weather = document.querySelector("#weather");
 let temperature = document.querySelector("#temperature");
 let weatherIcon = document.querySelector("#weatherIcon");
-
+let weatherCard = document.querySelector(".weather-card");
 // functions
 
 async function searchHandler() {
   const city = cityInput.value.trim();
   if (city === "") {
     cityInput.value = "";
+    weatherCard.classList.remove("active");
     cityInput.placeholder = "Enter Valid City";
-    cityInput.classList.add("emptyCity");
+    cityInput.classList.add("empty-city");
     return;
   }
+  weatherCard.classList.add("active");
   errorMessage(""); // here
   cityInput.classList.remove("emptyCity");
   antiSpam(true);
