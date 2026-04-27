@@ -7,12 +7,21 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <input type="text" id="cityInput" placeholder="Enter City Name" />
-    <button id="searchBtn">Search</button>
-    <div id="result">
-      <h2 id="city"></h2>
-      <p id="weather"></p>
-      <p id="temperature"></p>
+    <div class="weather-card">
+      <div class="search-box">
+        <input type="text" id="cityInput" placeholder="Enter City Name" />
+        <button id="searchBtn">Search</button>
+      </div>
+      <div id="result">
+        <h2 id="city"></h2>
+        <div class="weather-box">
+          <p id="temperature"></p>
+          <img src="" alt="" id="weatherIcon" />
+        </div>
+        <div class="weather-description">
+          <p id="weather"></p>
+        </div>
+      </div>
     </div>
     <script defer src="script.js"></script>
   </body>

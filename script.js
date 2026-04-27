@@ -53,6 +53,10 @@ function weatherData(data) {
   cityName.textContent = data.name;
   weather.textContent = data.weather[0].description;
   temperature.textContent = data.main.temp + "°C";
+  ///icon
+
+  weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+  console.log("ICON:", data.weather[0].icon);
 }
 
 //loading message
