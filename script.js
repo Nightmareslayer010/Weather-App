@@ -1,13 +1,14 @@
 let cityInput = document.querySelector("#city-input");
 let searchBtn = document.querySelector("#searchBtn");
-let result = document.querySelector("#result");
-//elements
+//result elements
 let cityName = document.querySelector("#city");
-let weather = document.querySelector("#weather");
 let temperature = document.querySelector("#temperature");
 let weatherIcon = document.querySelector("#weatherIcon");
+let weatherDescription = document.querySelector(".weather-description");
+//styling toggle
 let weatherCard = document.querySelector(".weather-card");
-// functions
+
+//function
 
 async function searchHandler() {
   const city = cityInput.value.trim();
@@ -15,72 +16,65 @@ async function searchHandler() {
     cityInput.value = "";
     weatherCard.classList.remove("active");
     cityInput.placeholder = "Enter Valid City";
-    cityInput.classList.add("empty-city");
     return;
   }
   weatherCard.classList.add("active");
-  errorMessage(""); // here
-  cityInput.classList.remove("emptyCity");
+  ErrorMsg("");
   antiSpam(true);
   loadingMessage();
+
   try {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=e82c39ac97dae6f6977d113b0513e7a4`,
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=0c8684a0e7db84d9d0aa073ddfe3cc04`,
     );
-
     const data = await response.json();
-    //data validation
-    if (data.cod == 404) {
-      errorMessage("City not Found"); //here
+    if (data.cod === 404) {
+      ErrorMsg("City Not Found");
       return;
     }
     console.log(data);
-    weatherData(data);
+    renderWeatherData(data);
   } catch (error) {
-    errorMessage("Something went Wrong"); // here
+    ErrorMsg("Something Went Wrong");
   } finally {
     antiSpam(false);
   }
 }
 
-//anti spam
+//Remove Error Message
+function ErrorMsg(msg) {
+  cityName.textContent = msg;
+  temperature.textContent = "";
+  weatherDescription.textContent = "";
+}
 
+//anti spam
 function antiSpam(isDisabled) {
   searchBtn.disabled = isDisabled;
   cityInput.disabled = isDisabled;
 }
 
-//weather data
-function weatherData(data) {
-  cityName.textContent = data.name;
-  weather.textContent = data.weather[0].description;
-  temperature.textContent = data.main.temp + "°C";
-  ///icon
-
-  weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-  console.log("ICON:", data.weather[0].icon);
-}
-
-//loading message
+//loading Message
 function loadingMessage() {
-  cityName.textContent = "Fetching Data Please wait";
-  weather.textContent = "";
+  cityName.textContent = "Fetching data Please Wait";
   temperature.textContent = "";
+  weatherDescription.textContent = "";
 }
 
-//error message
-
-function errorMessage(msg) {
-  cityName.textContent = msg;
-  weather.textContent = "";
-  temperature.textContent = "";
+//rendering weather data
+function renderWeatherData(data) {
+  cityName.textContent = data.name;
+  temperature.textContent = `${data.main.temp}°C`;
+  weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+  weatherDescription.textContent = data.weather[0].description;
 }
 
-// event listeners
-searchBtn.addEventListener("click", searchHandler);
+//event listeners
 
 cityInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     searchHandler();
   }
 });
+
+searchBtn.addEventListener("click", searchHandler);
